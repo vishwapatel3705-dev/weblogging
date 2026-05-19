@@ -1,0 +1,28 @@
+<%- include("partials/header") %>
+
+<section class="auth-panel">
+  <div class="form-heading">
+    <p class="eyebrow">Start writing</p>
+    <h1>Register</h1>
+  </div>
+
+  <% if (error) { %>
+    <p class="form-error"><%= error %></p>
+  <% } %>
+
+  <form action="/register" method="POST" class="stacked-form">
+    <label>
+      <span>Username</span>
+      <input type="text" name="username" minlength="3" required>
+    </label>
+    <label>
+      <span>Password</span>
+      <input type="password" name="password" minlength="6" required>
+    </label>
+    <button class="button button-primary" type="submit">Create Account</button>
+  </form>
+
+  <p class="auth-switch">Already have an account? <a href="/login">Login</a></p>
+</section>
+
+<%- include("partials/footer") %>

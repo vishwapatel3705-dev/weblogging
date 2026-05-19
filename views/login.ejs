@@ -1,0 +1,28 @@
+<%- include("partials/header") %>
+
+<section class="auth-panel">
+  <div class="form-heading">
+    <p class="eyebrow">Welcome back</p>
+    <h1>Login</h1>
+  </div>
+
+  <% if (error) { %>
+    <p class="form-error"><%= error %></p>
+  <% } %>
+
+  <form action="/login" method="POST" class="stacked-form">
+    <label>
+      <span>Username</span>
+      <input type="text" name="username" required>
+    </label>
+    <label>
+      <span>Password</span>
+      <input type="password" name="password" required>
+    </label>
+    <button class="button button-primary" type="submit">Login</button>
+  </form>
+
+  <p class="auth-switch">New here? <a href="/register">Create an account</a></p>
+</section>
+
+<%- include("partials/footer") %>

@@ -1,11 +1,41 @@
-<h1>Edit Blog</h1>
+<%- include("partials/header") %>
 
-<form action="/blogs/<%= blog._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
-  <input type="text" name="title" value="<%= blog.title %>">
-  <input type="text" name="author" value="<%= blog.author %>">
-  <textarea name="content"><%= blog.content %></textarea>
+<section class="form-panel">
+  <div class="form-heading">
+    <p class="eyebrow">Revise post</p>
+    <h1>Edit Blog</h1>
+  </div>
 
-  <input type="file" name="image">
+  <form action="/blogs/<%= blog._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="stacked-form">
+    <label>
+      <span>Title</span>
+      <input type="text" name="title" value="<%= blog.title %>" required>
+    </label>
 
-  <button>Update</button>
-</form>
+    <label>
+      <span>Category</span>
+      <select name="category" required>
+        <% categories.forEach(category => { %>
+          <option value="<%= category %>" <%= (blog.category || "General") === category ? "selected" : "" %>><%= category %></option>
+        <% }) %>
+      </select>
+    </label>
+
+    <label>
+      <span>Content</span>
+      <textarea name="content" required><%= blog.content %></textarea>
+    </label>
+
+    <label>
+      <span>Cover image</span>
+      <input type="file" name="image" accept="image/*">
+    </label>
+
+    <div class="form-actions">
+      <button class="button button-primary" type="submit">Update</button>
+      <a class="button button-ghost" href="/blogs/<%= blog._id %>">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include("partials/footer") %>

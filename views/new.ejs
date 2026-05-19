@@ -1,11 +1,41 @@
-<h1>Create Blog</h1>
+<%- include("partials/header") %>
 
-<form action="/blogs" method="POST" enctype="multipart/form-data">
-  <input type="text" name="title" placeholder="Title" required>
-  <input type="text" name="author" placeholder="Author" required>
-  <textarea name="content" placeholder="Content" required></textarea>
+<section class="form-panel">
+  <div class="form-heading">
+    <p class="eyebrow">New post</p>
+    <h1>Create Blog</h1>
+  </div>
 
-  <input type="file" name="image">
+  <form action="/blogs" method="POST" enctype="multipart/form-data" class="stacked-form">
+    <label>
+      <span>Title</span>
+      <input type="text" name="title" placeholder="Give the post a clear title" required>
+    </label>
 
-  <button>Create</button>
-</form>
+    <label>
+      <span>Category</span>
+      <select name="category" required>
+        <% categories.forEach(category => { %>
+          <option value="<%= category %>"><%= category %></option>
+        <% }) %>
+      </select>
+    </label>
+
+    <label>
+      <span>Content</span>
+      <textarea name="content" placeholder="Write your story..." required></textarea>
+    </label>
+
+    <label>
+      <span>Cover image</span>
+      <input type="file" name="image" accept="image/*">
+    </label>
+
+    <div class="form-actions">
+      <button class="button button-primary" type="submit">Create</button>
+      <a class="button button-ghost" href="/">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include("partials/footer") %>

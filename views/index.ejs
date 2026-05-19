@@ -1,23 +1,71 @@
-<h1>Blog Posts</h1>
-<a href="/new">Create Blog</a>
-<hr>
+<%- include("partials/header") %>
 
-<% blogs.forEach(blog => { %>
+<section class="hero">
   <div>
-    <h3><%= blog.title %></h3>
-    <p>By <%= blog.author %></p>
-
-    <% if (blog.image) { %>
-      <img src="/uploads/<%= blog.image %>" width="200">
-    <% } %>
-
-    <br>
-    <a href="/blogs/<%= blog._id %>">Read</a>
-    <a href="/blogs/<%= blog._id %>/edit">Edit</a>
-
-    <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
-      <button>Delete</button>
-    </form>
-    <hr>
+    <p class="eyebrow">Personal publishing, cleaned up</p>
+    <h1>Read, write, and organize your blog posts.</h1>
+    <p class="hero-copy">Search the archive, browse by category, and keep publishing access behind a simple account system.</p>
   </div>
-<% }) %>
+  <% if (currentUser) { %>
+    <a class="button button-primary hero-button" href="/new">Create Blog</a>
+  <% } else { %>
+    <a class="button button-primary hero-button" href="/login">Login to Write</a>
+  <% } %>
+</section>
+
+<form class="filter-bar" action="/" method="GET">
+  <label>
+    <span>Search</span>
+    <input type="search" name="q" value="<%= filters.q %>" placeholder="Title, author, content...">
+  </label>
+  <label>
+    <span>Category</span>
+    <select name="category">
+      <option value="">All categories</option>
+      <% categories.forEach(category => { %>
+        <option value="<%= category %>" <%= filters.category === category ? "selected" : "" %>><%= category %></option>
+      <% }) %>
+    </select>
+  </label>
+  <button class="button button-primary" type="submit">Search</button>
+  <% if (filters.q || filters.category) { %>
+    <a class="button button-ghost" href="/">Clear</a>
+  <% } %>
+</form>
+
+<section class="post-grid">
+  <% if (blogs.length === 0) { %>
+    <div class="empty-state">
+      <h2>No posts found</h2>
+      <p>Try a different search or category.</p>
+    </div>
+  <% } %>
+
+  <% blogs.forEach(blog => { %>
+    <article class="post-card">
+      <% if (blog.image) { %>
+        <img class="post-image" src="/uploads/<%= blog.image %>" alt="<%= blog.title %>">
+      <% } %>
+      <div class="post-body">
+        <div class="post-meta">
+          <span><%= blog.category || "General" %></span>
+          <span><%= blog.createdAt.toLocaleDateString() %></span>
+        </div>
+        <h2><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h2>
+        <p class="post-author">By <%= blog.author %></p>
+        <p class="post-excerpt"><%= blog.content.length > 140 ? blog.content.substring(0, 140) + "..." : blog.content %></p>
+        <div class="card-actions">
+          <a class="button button-ghost" href="/blogs/<%= blog._id %>">Read</a>
+          <% if (currentUser && (!blog.owner || blog.owner.toString() === currentUser._id.toString())) { %>
+            <a class="button button-ghost" href="/blogs/<%= blog._id %>/edit">Edit</a>
+            <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST" class="inline-form">
+              <button class="button button-danger" type="submit">Delete</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    </article>
+  <% }) %>
+</section>
+
+<%- include("partials/footer") %>
